@@ -1,3 +1,6 @@
+
+![emwtinv_logo](https://github.com/user-attachments/assets/d1dc7074-3ec4-4dee-a239-82fe64a388b3)
+
 # EMWTINV
 
 **EMWTINV** is a Python tool for performing **Hybrid Bayesian Inversion (HBI)** for hydrogeophysical data interpretation.
