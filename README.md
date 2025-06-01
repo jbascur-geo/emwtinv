@@ -11,13 +11,13 @@ HBI decomposes the subsurface model into two components:
 * **Groundwater Model**:
 
   * Predictable using petrophysical and hydrological modeling
-  * Characterized by **posterior probability density functions (PDFs)**
+  * Characterized by posterior probability density functions (PDFs)
 
 * **Background Model**:
 
   * Not predictable from petrophysical or hydrological models
   * Represented by deterministic resistivity structures (1D/2D/3D)
-  * Not explicitly associated with uncertainty
+  * Its uncertainty is not characterized
 
 This decomposition allows computationally expensive Bayesian inference to be applied only to the groundwater component (which is lower-dimensional), while the background model is handled using conventional least-squares inversion.
 
