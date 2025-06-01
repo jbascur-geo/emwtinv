@@ -4,11 +4,7 @@
 
 ## What is Hybrid Bayesian Inversion (HBI)?
 
-Hybrid Bayesian Inversion (HBI) is a Bayesian extension of Coupled Hydrogeophysical Inversion (CHI) that enables efficient estimation of hydrological properties from geophysical data. It integrates:
-
-* Petrophysical relationships
-* Hydrological models
-* Uncertainty in calibration parameters
+Hybrid Bayesian Inversion (HBI) is a Bayesian extension of Coupled Hydrogeophysical Inversion (CHI) that enables efficient estimation of hydrological properties from geophysical data. It can integrates petrophysical relationships and hydrological models with significant uncertainty in calibration parameters.
 
 HBI decomposes the subsurface model into two components:
 
