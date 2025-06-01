@@ -1,0 +1,16 @@
+Zmin: -2
+Zmax: 0
+dZ: 0.125
+log_sigma_min: 3
+log_sigma_max: 14.2
+beta_min: -1.0
+beta_max: 0.05
+por_min: 0.1
+por_max: 0.5
+m1: 1.5
+m2: 2.5
+logA1: 2.049042062
+logA2: 2.62554898
+sigma0: 
+sigma0_var: 
+magic_lmd: 
