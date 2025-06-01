@@ -50,107 +50,79 @@ EMWTINV is executed via the `emwtinv_multi.py` script. Example applications are 
 
 Before running, place the following files in the same directory as `emwtinv_multi.py`:
 
-#### `emwtinv_setup.txt`
+## emwtinv_setup.txt
 
-Defines input data, geophysical method, E-step, and M-step parameters.
+Defines input data, geophysical method, E-step and M-step parameters.
 
-**Content:**
+📁 Geophysical Data
+* Data_list: Path to the observation file with geophysical data.
+* Method: Geophysical method to be used. Options include:
+     * DC2D – Electrical Resistivity Tomography (2D)
+     * DC1D – Electrical Vertical Sounding
+     * TEM1D – Transient Electromagnetics (1D)
+     * MT1D – Magnetotellurics (1D, not tested)
+     * GRAV2D – Gravity (2D, not tested)
 
-**Geophysical Data**
+🔧 M-STEP Parameters (Traditional Inversion of Background Model)
+* externalmodel: Initial model flag (True/False)
+* external_constant_model: Use a halfspace model as initial model (True/False)
+* externalmodel_ref: Reference model flag (True/False)
+* model_file: Path to the initial background model file (if externalmodel is True)
+* model_mesh: Mesh file used for the initial background model
+* modelref_file: Path to the reference model used during M-step regularization
+* modelref_mesh: Mesh file used for the reference model
+* invert_initial_bkmodel: Use traditional inversion to estimate the initial background model (True/False)
+* reference_value: Value used for halfspace model when external_constant_model is True
+* sub_lmd: Not used
+* emmax_iter: Number of HBI iterations
 
-```
-Data_list: xxxx.dat        # Observation file with geophysical data
-Method: DC2D               # Geophysical method
-                           # Options:
-                           # DC2D: Electrical Resistivity Tomography
-                           # DC1D: Electrical Vertical Sounding
-                           # TEM1D: Electromagnetic transient
-                           # MT1D: Magnetotellurics (non-tested)
-                           # GRAV2D: Gravity (non-tested)
-```
+🧮 SimPEG Regularization Parameters for Initial Background Model
+* invparameters0.Collingrate: Number of iterations to reduce beta
+* invparameters0.Beta: Trade-off factor
+* invparameters0.Minbeta: Minimum beta
+* invparameters0.Collingfactor: Factor to reduce beta
+* invparameters0.alpha_x/y/z/s: Regularization weights for gradients and model smallness
+* invparameters0.chifact: Misfit target
 
-**M-STEP Parameters (Background model inversion)**
+🧮 SimPEG Regularization Parameters for Background Model (M-Step)
+* invparameters.Collingrate: Number of iterations to reduce beta
+* invparameters.Beta: Trade-off factor
+* invparameters.Minbeta: Minimum beta
+* invparameters.Collingfactor: Factor to reduce beta
+* invparameters.alpha_x/y/z/s: Regularization weights for gradients and model smallness
+* invparameters.chifact: Misfit target
 
-```
-externalmodel: True
-external_constant_model: False
-externalmodel_ref: True
+🔄 E-STEP Parameters (Bayesian Inversion of Groundwater Model)
+* estep_niter: Number of groundwater model samples per MPI thread
+* estep_beta: Not used
+* estep_beta_factor: Not used
+* estep_prop: Model generator type. Options:
+   * REF – 2D unconfined aquifer constrained by water table (Zwt)
+   * 2D – 2D unconfined aquifer (no Zwt)
+   * 1D – 1D unconfined aquifer
+* vmin: Not used
+* vmax: Not used
 
-model_file: path/to/model_file.txt
-model_mesh: path/to/mesh_file.txt
-modelref_file: path/to/modelref.txt
-modelref_mesh: path/to/meshref.txt
-invert_initial_bkmodel: True
-reference_value: 400
-sub_lmd:
-emmax_iter: 100
-```
+# sigmawt_setup.txt
+Defines the prior distributions and bounds for petrophysical parameters used to generate groundwater models. 
 
-**SimPEG Regularization Parameters (initial inversion)**
+Example for 2D unconfined aquifer with ERT.
 
-```
-invparameters0.Collingrate: 5
-invparameters0.Beta: 1.0
-invparameters0.Minbeta: 1e-5
-invparameters0.Collingfactor: 0.8
-invparameters0.alpha_x: 1.0
-invparameters0.alpha_y: 1.0
-invparameters0.alpha_z: 1.0
-invparameters0.alpha_s: 1.0
-invparameters0.chifact: 1.0
-```
-
-**SimPEG Regularization Parameters (background model iterations)**
-
-```
-invparameters.Collingrate: 5
-invparameters.Beta: 1.0
-invparameters.Minbeta: 1e-5
-invparameters.Collingfactor: 0.8
-invparameters.alpha_x: 1.0
-invparameters.alpha_y: 1.0
-invparameters.alpha_z: 1.0
-invparameters.alpha_s: 1.0
-invparameters.chifact: 1.0
-```
-
-**E-STEP Parameters (Bayesian inversion)**
-
-```
-estep_niter: 1000
-estep_beta:
-estep_beta_factor:
-estep_prop: 2D         # Options: REF, 2D, 1D
-vmin:
-vmax:
-```
-
-#### `sigmawt_setup.txt`
-
-Defines prior PDFs and parameter ranges for the groundwater model.
-
-**Example (2D unconfined aquifer - ERT):**
-
-```
-Zmin: 10
-Zmax: 30
-dZ: 0.5
-log_sigma_min: -1
-log_sigma_max: 9
-beta_min: -1
-beta_max: -0.05
-por_min: 0.10
-por_max: 0.50
-m1: 1.5
-m2: 2.5
-logA1: 0.0
-logA2: 3.4
-sigma0:
-sigma0_var:
-magic_lmd:
-```
-
----
+Parameter	Description
+* Zmin	Minimum elevation of the water table at the center of the model
+* Zmax	Maximum elevation of the water table at the center of the model
+* dZ	Discretization step for water table elevation
+* log_sigma_min	Minimum log bulk resistivity
+* log_sigma_max	Maximum log bulk resistivity
+* beta_min	Minimum CK-relationship correlation factor (β)
+* beta_max	Maximum CK-relationship correlation factor (β)
+* por_min	Minimum porosity
+* por_max	Maximum porosity
+* m1, m2	Range of Archie’s cementation factor (m)
+* logA1, logA2	Range of log aquifer resistivity (log Ω·m) for Archie’s Law
+* sigma0	Not used
+* sigma0_var	Not used
+* magic_lmd	Not used
 
 ## Running EMWTINV
 
