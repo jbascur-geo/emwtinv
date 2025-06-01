@@ -28,10 +28,10 @@ To jointly estimate:
 * The posterior PDFs of the **Groundwater Model**
 * The maximum likelihood estimate (MLE) of the **Background Model**
 
-HBI uses the **Expectation-Maximization (EM)** algorithm:
+HBI applies the **Expectation-Maximization (EM)** algorithm, where each iteration executes the following sequence:
 
-* **E-step**: Bayesian inversion (via Metropolis-Hastings sampling)
-* **M-step**: Least-squares inversion of the background model
+* **E-step**: Bayesian inversion of the groundwater model using Metropolis-Hastings sampling.
+* **M-step**: Least-squares inversion of the background model.
 
 ---
 
